@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>META HOTEL — Admin Management Panel</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    
+    <!-- ─── Login Page Section ─── -->
+    <div id="loginPage" class="login-page" style="display: flex;">
+      <div class="login-card">
+        <div class="login-logo">META<span>ADMIN</span></div>
+        <p class="login-subtitle">กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูลการจองห้องพัก</p>
+        
+        <div class="login-form">
+          <div class="form-group">
+            <input type="password" id="adminPassword" class="form-input" placeholder="••••••••" autofocus>
+            <p id="loginError" class="login-error">รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</p>
+          </div>
+          <button id="loginBtn" class="btn btn-primary" style="width: 100%; padding: var(--space-3);">เข้าสู่ระบบ</button>
+        </div>
+        
+        <div style="margin-top: 20px; font-size: 0.85rem; opacity: 0.5;">
+          <a href="index.html" style="color: white; text-decoration: underline;">กลับสู่หน้าหลักโรงแรม</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Dashboard Section ─── -->
+    <div id="dashboardPage" class="dashboard-page" style="display: none;">
+      
+      <!-- Admin Header -->
+      <header class="admin-header">
+        <div class="admin-header-left" style="display: flex; align-items: center;">
+          <div class="admin-brand">META<span>HOTEL</span></div>
+          <span class="admin-title">ระบบจัดการหลังบ้าน (Admin Dashboard)</span>
+        </div>
+        <div class="admin-header-right">
+          <button id="refreshBtn" class="admin-refresh-btn">
+            <span>🔄</span> รีเฟรชข้อมูล
+          </button>
+          <button id="logoutBtn" class="admin-logout-btn">ออกจากระบบ</button>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Content -->
+      <main class="admin-content">
+        
+        <!-- Loading Screen -->
+        <div id="adminLoading" class="admin-loading" style="display: none;">
+          <div class="spinner"></div>
+        </div>
+
+        <div id="adminContent">
+          
+          <!-- Statistics Cards Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">ยอดจองทั้งหมด</span>
+                <span class="stat-icon bookings">📋</span>
+              </div>
+              <div id="statTotalBookings" class="stat-value">0</div>
+              <div style="font-size: 0.8rem; color: rgba(255,255,255,0.4);">รายการจองในระบบ</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">ห้องว่างพร้อมบริการ</span>
+                <span class="stat-icon rooms">🔑</span>
+              </div>
+              <div id="statAvailableRooms" class="stat-value">100</div>
+              <div style="font-size: 0.8rem; color: rgba(255,255,255,0.4);">จากทั้งหมด 100 ห้อง (10 ชั้น)</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">รายได้รวมที่คาดการณ์</span>
+                <span class="stat-icon revenue">💰</span>
+              </div>
+              <div id="statRevenue" class="stat-value">฿0</div>
+              <div style="font-size: 0.8rem; color: rgba(255,255,255,0.4);">รวมราคาจองทุกรายการ</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-label">รายการจองวันนี้</span>
+                <span class="stat-icon today">📅</span>
+              </div>
+              <div id="statTodayBookings" class="stat-value">0</div>
+              <div style="font-size: 0.8rem; color: rgba(255,255,255,0.4);">ทำรายการใหม่ในวันนี้</div>
+            </div>
+          </div>
+
+          <!-- Floor & Room Occupancy Grid Map -->
+          <div class="admin-panel">
+            <div class="panel-header" style="flex-wrap: wrap;">
+              <h3 class="panel-title"><span>📊</span> แผนผังสถานะห้องพักในโรงแรม (Room Occupancy Floor Map)</h3>
+              <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                <label for="mapDatePicker" style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">ดูสถานะวันที่:</label>
+                <input type="date" id="mapDatePicker" class="filter-input" style="width: auto; min-width: 160px; color-scheme: dark;">
+                <div class="room-legend">
+                  <div class="legend-item">
+                    <div class="legend-dot available"></div>
+                    <span>ว่าง (Available)</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-dot occupied"></div>
+                    <span>จองแล้ว (Booked)</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-dot checkout" style="background: rgba(245, 158, 11, 0.4); border: 1px solid var(--warning);"></div>
+                    <span>เช็คเอาท์วันนี้ (Check-out)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div id="roomGridContainer" class="room-grid-wrapper">
+                <!-- Javascript will render floor rows here dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Booking Table List Panel -->
+          <div class="admin-panel">
+            <div class="panel-header">
+              <h3 class="panel-title"><span>📋</span> ประวัติการจองและคำขอพักอาศัย</h3>
+              <div class="panel-actions">
+                <div class="filter-bar">
+                  <input type="text" id="bookingSearch" class="filter-input" placeholder="ค้นหา ชื่อเล่น, เบอร์โทร, ห้อง...">
+                </div>
+                <button id="exportBtn" class="export-btn">
+                  <span>📥</span> Export CSV
+                </button>
+              </div>
+            </div>
+            
+            <div class="panel-body" style="padding: 0;">
+              <!-- Empty State -->
+              <div id="bookingEmpty" class="empty-state" style="display: none;">
+                <div class="empty-icon">📭</div>
+                <div class="empty-text">ไม่พบรายการข้อมูลการจองห้องพัก</div>
+                <div class="empty-subtext">หากมีการจองเข้ามาใหม่ ข้อมูลจะแสดงขึ้นตรงนี้โดยอัตโนมัติ</div>
+              </div>
+
+              <!-- Data Table -->
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">ลำดับ</th>
+                      <th>ชื่อเล่น</th>
+                      <th>เบอร์โทรศัพท์</th>
+                      <th>ห้องพัก (ชั้น-ห้อง)</th>
+                      <th>ประเภทเตียง / เสริม</th>
+                      <th>Check-in</th>
+                      <th>Check-out</th>
+                      <th>ราคารวม</th>
+                      <th>วันที่จอง</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bookingTableBody">
+                    <!-- Dynamic bookings rows here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
