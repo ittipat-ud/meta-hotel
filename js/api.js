@@ -97,13 +97,26 @@ class MetaAPI {
    * @returns {Promise<Object>} { success: boolean }
    */
   static async verifyAdmin(password) {
-    // ตรวจสอบ password ฝั่ง client (simple mode)
-    // ในโปรเจคจริงควรตรวจสอบฝั่ง server
-    const isValid = password === CONFIG.ADMIN_PASSWORD;
-    return {
-      success: isValid,
-      message: isValid ? 'Login successful' : 'Invalid password',
-    };
+    try {
+      if (CONFIG.API_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+        const isValid = password === 'meta2026';
+        return {
+          success: isValid,
+          message: isValid ? 'Login successful' : 'Invalid password',
+        };
+      }
+
+      const url = `${CONFIG.API_URL}?action=verifyAdmin&password=${encodeURIComponent(password)}`;
+      const response = await fetch(url);
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('[API] verifyAdmin error:', error);
+      return {
+        success: false,
+        message: 'Connection error: ' + error.message,
+      };
+    }
   }
 
   /* ─── Mock Functions (ใช้ตอนยังไม่ต่อ Google Sheets) ─── */

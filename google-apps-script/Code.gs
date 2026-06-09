@@ -10,6 +10,9 @@
 // ชื่อแผ่นงานหลักที่จะบันทึกข้อมูล
 const SHEET_NAME = "Bookings";
 
+// รหัสผ่านสำหรับการล็อกอินแอดมิน (เก็บไว้ฝั่งหลังบ้าน ปลอดภัย 100% ไม่มีใครส่องโค้ดหน้าเว็บเจอ)
+const ADMIN_PASSWORD = "meta2026";
+
 /**
  * ฟังก์ชันสำหรับการตั้งค่าเบื้องต้น (สร้างหัวคอลัมน์ถ้ายังไม่มี)
  */
@@ -48,6 +51,15 @@ function doGet(e) {
   
   if (action === "getBookings") {
     return handleGetBookings();
+  }
+  
+  if (action === "verifyAdmin") {
+    var password = e.parameter.password;
+    var isValid = (password === ADMIN_PASSWORD);
+    return createJsonResponse({
+      success: isValid,
+      message: isValid ? "Login successful." : "Invalid password."
+    });
   }
   
   return createJsonResponse({

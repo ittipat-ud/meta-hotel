@@ -15,7 +15,8 @@ const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbyezV1Q6OtJ_gcgSuKM5caLWAU2jwfd6Q9Ko4_g9CNxz8lI46LfwXhNmWq7N0NVlcA/exec',
 
   // ─── Admin Credentials ───
-  ADMIN_PASSWORD: 'meta2026',
+  // ย้ายการตรวจสอบรหัสผ่านไปไว้ที่ Apps Script (หลังบ้าน) เพื่อความปลอดภัยแล้วครับ
+
 
   // ─── Hotel Information ───
   HOTEL: {
